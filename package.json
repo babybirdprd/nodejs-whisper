@@ -1,7 +1,7 @@
 {
 	"name": "nodejs-whisper",
-	"version": "0.2.6",
-	"description": "Node bindings for OpenAI's Whisper. Optimized for CPU.",
+	"version": "0.2.7",
+	"description": "Node bindings for OpenAI's Whisper with cross-platform support. Optimized for CPU and GPU.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"publishConfig": {
@@ -12,14 +12,16 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ChetanXpro/nodejs-whisper"
+		"url": "https://github.com/babybirdprd/nodejs-whisper"
 	},
 	"scripts": {
 		"start": "ts-node src/index.ts",
 		"dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
 		"test": "ts-node example/index.ts",
 		"typecheck": "tsc --noEmit",
-		"build": "tsc && chmod +x dist/downloadModel.js",
+		"build": "tsc && node scripts/make-executable.js",
+		"build:whisper": "node scripts/build-whisper.js",
+		"postinstall": "npm run build:whisper",
 		"format": "prettier --write src/**/*.ts"
 	},
 	"keywords": [
@@ -45,13 +47,14 @@
 	],
 	"author": "chetan",
 	"license": "MIT",
-	"homepage": "https://github.com/ChetanXpro/nodejs-whisper#readme",
+	"homepage": "https://github.com/babybirdprd/nodejs-whisper#readme",
 	"bugs": {
-		"url": "https://github.com/ChetanXpro/nodejs-whisper/issues"
+		"url": "https://github.com/babybirdprd/nodejs-whisper/issues"
 	},
 	"dependencies": {
 		"readline-sync": "^1.4.10",
-		"shelljs": "^0.8.5"
+		"shelljs": "^0.8.5",
+		"cmake-js": "^7.3.0"
 	},
 	"devDependencies": {
 		"@types/node": "^22.0.0",
@@ -63,7 +66,7 @@
 		"typescript": "^5.1.6"
 	},
 	"files": [
-    "dist/",
-    "cpp/"
-]
+		"dist/",
+		"cpp/"
+	]
 }

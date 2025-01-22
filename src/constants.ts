@@ -1,4 +1,5 @@
 import path from 'path'
+import { platform } from 'os'
 
 export const MODELS_LIST = [
 	'tiny',
@@ -44,7 +45,29 @@ export const MODEL_OBJECT = {
 
 export const DEFAULT_MODEL = 'tiny.en'
 
+export const PLATFORM = platform()
+export const IS_WINDOWS = PLATFORM === 'win32'
+export const IS_MACOS = PLATFORM === 'darwin'
+export const IS_LINUX = !IS_WINDOWS && !IS_MACOS
+
 export const WHISPER_CPP_PATH = path.join(__dirname, '..', 'cpp', 'whisper.cpp')
 
-export const WHISPER_CPP_MAIN_PATH =
-	process.platform === 'win32' ? 'build\\bin\\Release\\whisper-cli.exe' : './build/bin/whisper-cli'
+export const BUILD_COMMANDS = {
+    win32: {
+        command: 'cmake -S . -B build -G "Visual Studio 17 2022" -A x64',
+        buildCommand: 'cmake --build build --config Release',
+        binaryPath: path.join('build', 'bin', 'Release', 'whisper-cli.exe')
+    },
+    darwin: {
+        command: 'cmake -S . -B build',
+        buildCommand: 'cmake --build build',
+        binaryPath: path.join('build', 'bin', 'whisper-cli')
+    },
+    linux: {
+        command: 'cmake -S . -B build',
+        buildCommand: 'cmake --build build',
+        binaryPath: path.join('build', 'bin', 'whisper-cli')
+    }
+}
+
+export const WHISPER_CPP_MAIN_PATH = BUILD_COMMANDS[PLATFORM].binaryPath
